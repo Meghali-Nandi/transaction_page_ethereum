@@ -1,0 +1,76 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <title>transaction app</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+		<script src="web3.js" ></script>
+    	<link rel="stylesheet" href="megrid.css">
+    </head>
+	<style>
+		.top-banner h3,h2{
+			text-align: center;
+		}
+
+		
+	</style>
+    <body>
+		<div class="grid-contain top-banner">
+			<div class="grid-33">
+				<div>Block Count</div>
+				<div id="block_count">
+                </div>
+			</div>
+			<div class="grid-33">
+				<div>Latest</div>
+				<div id="latest"></div>
+			</div>
+            <div class="grid-33">
+				<div>Pending</div>
+				<div id="pending"></div>
+			</div>
+			
+		</div>
+
+		<div class="container">
+			<div class="block">
+				
+			</div>
+		</div>
+
+    </body>
+
+	<script>
+    	var web3 = new Web3(new Web3.providers.HttpProvider("http://35.226.0.219:8545"));
+        
+        
+       
+                var filter = web3.eth.filter('latest');
+        filter.watch(function(error, result) {
+            block_no=web3.eth.blockNumber;
+            $('#block_count').append('<div>'+block_no+'</div> <br>');    
+          var block = web3.eth.getBlock(result, true);
+          $('#latest').append('<div>'+block.number+'</div> <br>');
+          console.dir(block.transactions);
+        })
+        var filter_pending = web3.eth.filter('pending');
+        filter_pending.watch(function(error, result) {
+               
+          var block = web3.eth.getBlock(result, true);
+            if(block!=null){
+                $('#pending').append('<div>'+block.number+'</div> <br>');
+                console.dir(block.transactions);
+            }
+            else{
+                $('#pending').append('<div>'+0+'</div> <br>');
+            }
+                
+          
+        })
+
+
+
+    </script>
+</html>
