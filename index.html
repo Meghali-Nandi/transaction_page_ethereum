@@ -17,60 +17,72 @@
 		
 	</style>
     <body>
-		<div class="grid-contain top-banner">
+        <div class="container">
+			<div class="grid-contain top-banner">
 			<div class="grid-33">
-				<div>Block Count</div>
+				<div>Block Count:</div>
 				<div id="block_count">
                 </div>
 			</div>
 			<div class="grid-33">
-				<div>Latest</div>
-				<div id="latest"></div>
+				<div>Eth Count: </div>
+				<div id="eth">0</div>
 			</div>
             <div class="grid-33">
-				<div>Pending</div>
-				<div id="pending"></div>
+				<div>Sols:</div>
+				<div id="sols">0</div>
+			</div>
+			
+		</div>
+		</div><br><br><hr><br>
+        
+		<div class="grid-contain transaction-banner">
+			<div class="grid-20">
+				<div>Block Number</div><hr>
+				<div id="latest">
+                </div>
+			</div>
+			<div class="grid-30">
+				<div>From</div><hr>
+				<div id="from"></div>
+			</div>
+            
+			<div class="grid-40">
+				<div>To</div><hr>
+				<div id="to"></div>
+			</div>
+            <div class="grid-10">
+				<div>Gas</div><hr>
+				<div id="gas"></div>
 			</div>
 			
 		</div>
 
-		<div class="container">
-			<div class="block">
-				
-			</div>
-		</div>
+		
 
     </body>
 
 	<script>
     	var web3 = new Web3(new Web3.providers.HttpProvider("http://35.226.0.219:8545"));
-        
-        
+            
+        block_no=web3.eth.blockNumber;
+        $('#block_count').html(block_no);
        
-                var filter = web3.eth.filter('latest');
-        filter.watch(function(error, result) {
-            block_no=web3.eth.blockNumber;
-            $('#block_count').append('<div>'+block_no+'</div> <br>');    
+        var filter_latest = web3.eth.filter('latest');
+        filter_latest.watch(function(error, result) {    
           var block = web3.eth.getBlock(result, true);
           $('#latest').append('<div>'+block.number+'</div> <br>');
-          console.dir(block.transactions);
+            var trans_info=block.transactions[0]
+            console.log(trans_info);
+           var from=(Object.values(trans_info))[2];
+            var to=(Object.values(trans_info))[8];
+            var gas=(Object.values(trans_info))[3];
+            $("#from").append('<div>'+from+'</div> <br>');
+            $("#to").append('<div>'+to+'</div> <br>');
+            $("#gas").append('<div>'+gas+'</div> <br>');
+            console.log((Object.values(trans_info))[8]);
         })
-        var filter_pending = web3.eth.filter('pending');
-        filter_pending.watch(function(error, result) {
-               
-          var block = web3.eth.getBlock(result, true);
-            if(block!=null){
-                $('#pending').append('<div>'+block.number+'</div> <br>');
-                console.dir(block.transactions);
-            }
-            else{
-                $('#pending').append('<div>'+0+'</div> <br>');
-            }
-                
-          
-        })
-
-
-
+        
+            
     </script>
-</html>
+</htm8
